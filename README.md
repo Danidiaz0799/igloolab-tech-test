@@ -165,53 +165,6 @@ DB_NAME=products_db
 - **Espaciado**: Grid system consistente
 - **Iconografía**: Emojis para mejor UX
 
-## 🔧 Comandos Útiles
-
-### 🔧 Backend
-```bash
-# Desarrollo con hot reload
-npm run dev
-
-# Construcción para producción
-npm run build
-
-# Ejecutar en producción
-npm start
-
-# Verificar conexión a BD
-npm run test-db
-```
-
-### 📱 Frontend
-```bash
-# Servidor de desarrollo
-npm run dev
-
-# Construcción optimizada
-npm run build
-
-# Preview de producción
-npm run preview
-
-# Linting de código
-npm run lint
-```
-
-### 🗄️ Base de Datos
-```bash
-# Iniciar PostgreSQL
-docker-compose up -d
-
-# Detener servicios
-docker-compose down
-
-# Ver logs en tiempo real
-docker-compose logs -f postgres
-
-# Reiniciar base de datos
-docker-compose restart postgres
-```
-
 ## 🗄️ Esquema de Base de Datos
 
 ### 📋 Tabla: products
@@ -226,13 +179,6 @@ CREATE TABLE products (
 );
 ```
 
-### 📊 Índices para Optimización
-```sql
-CREATE INDEX idx_products_name ON products(name);
-CREATE INDEX idx_products_price ON products(price);
-CREATE INDEX idx_products_created_at ON products(created_at);
-```
-
 ## 🛡️ Consideraciones de Seguridad
 
 - ✅ **Validación dual** - Frontend y backend validan datos
@@ -245,7 +191,7 @@ CREATE INDEX idx_products_created_at ON products(created_at);
 ### �️ Tecnologías Dominadas
 - Frontend: React, TypeScript, HTML5, CSS3, JavaScript
 - Backend: Node.js, Express, RESTful APIs
-- Base de Datos: PostgreSQL, MySQL, MongoDB
+- Base de Datos: PostgreSQL, MySQL
 - DevOps: Docker, Git, CI/CD
 - Herramientas: VSCode, Postman, DBeaver
 
@@ -297,7 +243,6 @@ CREATE INDEX idx_products_created_at ON products(created_at);
 - 🧪 Testing manual exhaustivo
 
 ---
-
 
 *Este proyecto demuestra competencias sólidas en desarrollo Full Stack moderno con las mejores prácticas de la industria.*
 
