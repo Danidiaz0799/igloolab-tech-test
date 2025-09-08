@@ -1,11 +1,8 @@
--- Script SQL para crear la base de datos y tabla de productos
+-- Script SQL para crear la tabla de productos en PostgreSQL
 -- Sistema de Gestión de Productos - IglooLab Tech Test
 
--- Crear base de datos (si no existe)
-CREATE DATABASE IF NOT EXISTS productos_db;
-
--- Usar la base de datos
-USE productos_db;
+-- Conectarse a la base de datos products_db
+-- (La base de datos se crea automáticamente con Docker)
 
 -- Eliminar tabla si existe (para desarrollo)
 DROP TABLE IF EXISTS products;

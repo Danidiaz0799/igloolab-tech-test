@@ -1,102 +1,166 @@
-# 🛍️ Sistema de Gestión de Productos
+# 🛍️ Sistema de Gestión de Productos - IglooLab Tech Test
 
-## 📋 Descripción del Proyecto
-Esta es una aplicación web completa desarrollada como parte de una prueba técnica para el puesto de **Developer Full Stack** en **IglooLab**. La aplicación permite gestionar un inventario de productos con operaciones completas de CRUD (Crear, Leer, Actualizar, Eliminar).
+Aplicación web Full Stack para gestionar inventario de productos con React + Node.js + PostgreSQL.
 
-**🎯 Objetivo:** Demostrar competencias en desarrollo Full Stack con tecnologías modernas y mejores prácticas de desarrollo.
+## 🚀 Ejecución Rápida
 
-## ✨ Características Principales
-- ✅ **Frontend Responsive**: React 18 + TypeScript + Vite
-- ✅ **Backend Robusto**: Node.js + Express + TypeORM  
-- ✅ **Base de Datos**: PostgreSQL 15 con Docker
-- ✅ **API RESTful** con validación completa de datos
-- ✅ **Interfaz moderna** con diseño responsive
-- ✅ **Gestión de estado** avanzada con React Context + useReducer
-- ✅ **Validación de formularios** en tiempo real con React Hook Form
-- ✅ **Manejo de errores** comprehensivo
-- ✅ **TypeScript** end-to-end para type safety
-- ✅ **Código limpio** y bien documentado
+### 📋 Prerrequisitos
+- Node.js v18+ ([Descargar](https://nodejs.org/))
+- Docker ([Descargar](https://www.docker.com/))
+
+### ⚡ Pasos para Ejecutar
+
+**1. Clonar proyecto**
+```bash
+git clone https://github.com/Danidiaz0799/igloolab-tech-test.git
+cd igloolab-tech-test
+```
+
+**2. Levantar Base de Datos**
+```bash
+docker-compose up -d
+```
+
+**3. Ejecutar Backend** (Terminal 1)
+```bash
+cd backEnd
+npm install
+npm run dev
+```
+✅ Backend corriendo en: http://localhost:3001
+
+**4. Ejecutar Frontend** (Terminal 2)
+```bash
+cd frontEnd
+npm install
+npm run dev
+```
+✅ Frontend corriendo en: http://localhost:5173
+
+### 🎯 Acceso a la Aplicación
+Abrir navegador en: **http://localhost:5173**
+
+---
 
 ## 🛠️ Stack Tecnológico
 
-### Frontend
-- **React 18** - Framework de interfaz de usuario
-- **TypeScript** - Tipado estático para JavaScript
-- **Vite** - Build tool moderno y rápido
-- **Axios** - Cliente HTTP para API calls
-- **React Hook Form** - Gestión eficiente de formularios
-- **CSS3** - Estilos personalizados con diseño responsivo
-
-### Backend
-- **Node.js** - Entorno de ejecución de JavaScript
-- **Express.js** - Framework web minimalista y flexible
-- **TypeORM** - ORM moderno para TypeScript/JavaScript
-- **TypeScript** - Tipado estático
-- **dotenv** - Gestión segura de variables de entorno
-- **CORS** - Cross-Origin Resource Sharing
-
-### Base de Datos
-- **PostgreSQL 15** - Sistema de gestión de bases de datos relacional
-- **Docker** - Containerización para fácil deployment
-
-### DevOps y Herramientas
-- **Docker Compose** - Orquestación de contenedores
-- **ESLint** - Linting de código
-- **Nodemon** - Desarrollo con hot reload
+| Componente | Tecnología |
+|------------|------------|
+| Frontend | React 18 + TypeScript + Vite |
+| Backend | Node.js + Express + TypeORM |
+| Base de Datos | PostgreSQL 15 + Docker |
+| API | RESTful con validación completa |
 
 ## 📁 Estructura del Proyecto
 
 ```
-igloolab-tech-test/
-├── 📱 frontEnd/                    # Aplicación React
-│   ├── src/
-│   │   ├── components/             # Componentes reutilizables
-│   │   │   ├── ProductForm.tsx     # Formulario de productos
-│   │   │   ├── ProductForm.css     # Estilos del formulario
-│   │   │   ├── ProductsList.tsx    # Lista de productos
-│   │   │   └── ProductsList.css    # Estilos de la lista
-│   │   ├── context/                # Gestión de estado global
-│   │   │   ├── productContext.ts   # Context y reducer
-│   │   │   ├── ProductProvider.tsx # Provider component
-│   │   │   └── productActions.ts   # Tipos de acciones
-│   │   ├── hooks/                  # Hooks personalizados
-│   │   │   └── useProducts.ts      # Hook para productos
-│   │   ├── services/               # Servicios de API
-│   │   │   └── productService.ts   # Cliente API con Axios
-│   │   ├── types/                  # Definiciones TypeScript
-│   │   │   └── product.ts          # Interfaces de producto
-│   │   ├── App.tsx                 # Componente principal
-│   │   ├── App.css                 # Estilos globales
-│   │   ├── main.tsx                # Punto de entrada
-│   │   └── index.css               # Reset CSS
-│   ├── package.json                # Dependencias frontend
-│   ├── tsconfig.json               # Configuración TypeScript
-│   └── vite.config.ts              # Configuración Vite
-├── 🔧 backEnd/                     # API REST con Node.js
-│   ├── src/
-│   │   ├── controllers/            # Controladores de la API
-│   │   │   └── ProductController.ts # Lógica de negocio
-│   │   ├── entities/               # Entidades de la base de datos
-│   │   │   └── Product.ts          # Modelo de producto
-│   │   ├── routes/                 # Definición de rutas
-│   │   │   └── productRoutes.ts    # Rutas de productos
-│   │   ├── config/                 # Configuración
-│   │   │   └── database.ts         # Configuración TypeORM
-│   │   └── index.ts                # Servidor Express
-│   ├── package.json                # Dependencias backend
-│   ├── tsconfig.json               # Configuración TypeScript
-│   └── .env                        # Variables de entorno
-├── 🗄️ database/                    # Configuración de base de datos
-│   ├── docker-compose.yml          # Docker PostgreSQL
-│   └── schema.sql                  # Script de creación
-└── 📖 README.md                    # Documentación
+📦 igloolab-tech-test
+├── 📱 frontEnd/          # React + TypeScript
+├── 🔧 backEnd/           # Node.js + Express API
+├── 🗄️ database/          # PostgreSQL scripts
+└── 🐳 docker-compose.yml # Base de datos
 ```
 
-## 🚀 Instalación y Configuración
+## 🔗 API Endpoints
 
-### ⚙️ Prerrequisitos
-Asegúrate de tener instalado:
-- **Node.js** v18 o superior ([Descargar](https://nodejs.org/))
+| Método | URL | Descripción |
+|--------|-----|-------------|
+| GET | `/api/products` | Listar productos |
+| POST | `/api/products` | Crear producto |
+| DELETE | `/api/products/:id` | Eliminar producto |
+
+## ✅ Funcionalidades
+
+- ➕ Crear productos con validación
+- 📋 Listar productos en tiempo real
+- 🗑️ Eliminar productos
+- 📱 Diseño responsive
+- ⚡ Interfaz moderna y rápida
+
+## 🔧 Configuración Técnica
+
+### Variables de Entorno (Backend)
+```env
+PORT=3001
+DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=postgres
+DB_PASSWORD=password
+DB_NAME=products_db
+```
+
+### Puertos de la Aplicación
+- **Frontend**: http://localhost:5173
+- **Backend**: http://localhost:3001
+- **PostgreSQL**: localhost:5432
+
+---
+
+**Desarrollado como prueba técnica para IglooLab**  
+**Stack**: React + Node.js + PostgreSQL + TypeScript
+- **npm** v8 o superior (incluido con Node.js)
+- **Docker** y **Docker Compose** ([Descargar](https://www.docker.com/))
+- **Git** para clonar el repositorio
+
+### 📥 1. Clonar el Repositorio
+```bash
+git clone https://github.com/Danidiaz0799/igloolab-tech-test.git
+cd igloolab-tech-test
+```
+
+### 🗄️ 2. Configurar y Levantar la Base de Datos PostgreSQL
+
+**Paso 1: Levantar PostgreSQL con Docker**
+```bash
+# Desde la raíz del proyecto
+docker-compose up -d
+```
+
+**Paso 2: Verificar que PostgreSQL esté funcionando**
+```bash
+docker-compose ps
+# Deberías ver el contenedor 'products_postgres' corriendo
+```
+
+**Configuración de la base de datos:**
+- **Host**: localhost
+- **Puerto**: 5432
+- **Base de datos**: products_db
+- **Usuario**: postgres
+- **Contraseña**: password
+
+### 🔧 3. Configurar y Ejecutar el Backend
+
+**Paso 1: Instalar dependencias**
+```bash
+cd backEnd
+npm install
+```
+
+**Paso 2: Configurar variables de entorno**
+```bash
+# Copiar el archivo de ejemplo y ajustar si es necesario
+cp .env.example .env
+```
+
+**Paso 3: Ejecutar el servidor backend**
+```bash
+npm run dev
+```
+
+✅ **Backend estará corriendo en:** http://localhost:3001
+✅ **API endpoints disponibles en:** http://localhost:3001/api/products
+
+### 📱 4. Configurar y Ejecutar el Frontend
+
+**Abrir una nueva terminal y navegar al frontend:**
+```bash
+cd frontEnd
+npm install
+npm run dev
+```
+
+✅ **Frontend estará corriendo en:** http://localhost:5173
 - **npm** v8 o superior (incluido con Node.js)
 - **Docker** y **Docker Compose** ([Descargar](https://www.docker.com/))
 - **Git** para clonar el repositorio
@@ -153,23 +217,30 @@ npm run dev
 
 ✅ **Backend corriendo en:** http://localhost:3001
 
-### 📱 4. Configurar el Frontend
-```bash
-cd ../frontEnd
-npm install
-npm run dev
-```
-
-✅ **Frontend corriendo en:** http://localhost:5173
-
-## 🌐 Acceso a la Aplicación
+### 🎯 5. Acceso a la Aplicación
 
 Una vez que todos los servicios estén ejecutándose:
 
 1. **Abrir navegador** en: http://localhost:5173
-2. **Agregar productos** usando el formulario superior
-3. **Ver lista de productos** en tiempo real
-4. **Eliminar productos** con confirmación
+2. **Agregar productos** usando el formulario de la izquierda
+3. **Ver lista de productos** en tiempo real en la derecha
+4. **Eliminar productos** con el botón "Eliminar" de cada producto
+
+### ✅ Verificación del Sistema
+
+**Backend funcionando correctamente:**
+- Visita: http://localhost:3001/api/products
+- Deberías ver una respuesta JSON con la lista de productos (inicialmente vacía)
+
+**Frontend funcionando correctamente:**
+- Visita: http://localhost:5173
+- Deberías ver la interfaz de "Gestión de Productos"
+
+**Base de datos funcionando correctamente:**
+```bash
+docker-compose logs postgres
+# No deberías ver errores en los logs
+```
 
 ## 📊 API Endpoints
 
@@ -556,6 +627,82 @@ La aplicación estará disponible en http://localhost:5173
 ### Ejemplo de uso:
 
 ```bash
+# Crear un producto
+curl -X POST http://localhost:3001/api/products \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "iPhone 15 Pro",
+    "description": "Smartphone Apple con chip A17 Pro",
+    "price": 4500000
+  }'
+
+# Obtener todos los productos
+curl http://localhost:3001/api/products
+
+# Eliminar un producto
+curl -X DELETE http://localhost:3001/api/products/1
+```
+
+## 📋 Checklist de Entregables
+
+### ✅ Obligatorios Completados
+- [x] **Frontend React + TypeScript** - Aplicación completa y funcional
+- [x] **Backend Node.js + Express + TypeORM** - API RESTful completa
+- [x] **Base de Datos PostgreSQL** - Con Docker y script SQL
+- [x] **README.md completo** - Instrucciones detalladas de instalación
+- [x] **Código fuente organizado** - Estructura clara y documentada
+
+### 📁 Archivos Principales del Proyecto
+
+#### Frontend (`/frontEnd/`)
+- `src/App.tsx` - Componente principal
+- `src/components/ProductForm.tsx` - Formulario de productos
+- `src/components/ProductsList.tsx` - Lista de productos
+- `src/context/ProductContext.tsx` - Gestión de estado global
+- `package.json` - Dependencias y scripts
+
+#### Backend (`/backEnd/`)
+- `src/controllers/ProductController.ts` - Controlador de productos
+- `src/entities/Product.ts` - Modelo de datos
+- `src/routes/productRoutes.ts` - Rutas de la API
+- `src/config/database.ts` - Configuración de base de datos
+- `.env.example` - Variables de entorno de ejemplo
+
+#### Base de Datos (`/database/`)
+- `schema.sql` - Script de creación de tablas
+- `init.sql` - Script de inicialización
+- `README.md` - Documentación específica de BD
+
+#### Configuración
+- `docker-compose.yml` - Configuración PostgreSQL
+- `README.md` - Documentación principal del proyecto
+
+## 🎯 Resumen del Desarrollo
+
+**Tecnologías implementadas:**
+- Frontend: React 18 + TypeScript + Vite
+- Backend: Node.js + Express + TypeORM
+- Base de Datos: PostgreSQL 15 + Docker
+- API: RESTful con validación completa
+
+**Funcionalidades principales:**
+- CRUD completo de productos
+- Interfaz responsive y moderna
+- Validación de formularios en tiempo real
+- Gestión de estado avanzada
+- Manejo de errores robusto
+
+**Calidad de código:**
+- TypeScript end-to-end
+- Estructura modular y escalable
+- Documentación completa
+- Código limpio y bien organizado
+
+---
+
+**🚀 Proyecto desarrollado por [Tu Nombre] como parte de la prueba técnica para IglooLab**  
+**📅 Fecha de entrega: [Fecha actual]**  
+**💼 Posición: Developer Full Stack**
 # Obtener todos los productos
 curl http://localhost:3001/api/products
 
