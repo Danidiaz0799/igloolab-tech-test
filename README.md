@@ -25,6 +25,8 @@ docker-compose up -d
 ```bash
 cd backEnd
 npm install
+# Copiar variables de entorno y configurar según tu sistema
+cp .env.example .env
 npm run dev
 ```
 ✅ Backend corriendo en: http://localhost:3001
@@ -80,6 +82,7 @@ Abrir navegador en: **http://localhost:5173**
 ## 🔧 Configuración Técnica
 
 ### Variables de Entorno (Backend)
+**Copiar `.env.example` a `.env` y ajustar si es necesario:**
 ```env
 PORT=3001
 DB_HOST=localhost
@@ -87,6 +90,7 @@ DB_PORT=5432
 DB_USERNAME=postgres
 DB_PASSWORD=password
 DB_NAME=products_db
+NODE_ENV=development
 ```
 
 ### Puertos de la Aplicación

@@ -39,7 +39,6 @@ const ProductForm: React.FC = () => {
     setSubmitSuccess(false);
 
     try {
-      // Convertir el precio a number
       const productData: CreateProductDto = {
         name: data.name.trim(),
         description: data.description.trim(),
@@ -48,14 +47,11 @@ const ProductForm: React.FC = () => {
 
       const newProduct = await productService.createProduct(productData);
       
-      // Actualizar el estado global
       dispatch(productActions.addProduct(newProduct));
       
-      // Mostrar éxito y resetear formulario
       setSubmitSuccess(true);
       reset();
       
-      // Quitar mensaje de éxito después de 3 segundos
       setTimeout(() => {
         setSubmitSuccess(false);
       }, 3000);
@@ -103,7 +99,7 @@ const ProductForm: React.FC = () => {
             id="name"
             type="text"
             className={`form-input ${errors.name ? 'error' : ''}`}
-            placeholder="Ej: iPhone 14 Pro"
+            placeholder="Ingresa el nombre del producto"
             {...register('name', {
               required: 'El nombre es obligatorio',
               minLength: {
