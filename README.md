@@ -1,5 +1,5 @@
 # 🛍️ Sistema de Gestión de Productos - IglooLab Tech Test
-
+![alt text](image.png)
 Aplicación web Full Stack para gestionar inventario de productos con React + Node.js + PostgreSQL.
 
 ## 🚀 Ejecución Rápida
