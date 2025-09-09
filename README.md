@@ -282,6 +282,30 @@ npm start
 # - Escanear QR con Expo Go app en tu teléfono
 ```
 
+#### ⚠️ **Configuración Importante para Testing Móvil**
+
+**Para probar en dispositivos físicos** (Android/iOS con Expo Go), es necesario configurar la IP local:
+
+1. **Obtener tu IP local** (Windows):
+   ```bash
+   ipconfig
+   ```
+   Buscar la IP en `Adaptador de LAN inalámbrica Wi-Fi` → `Dirección IPv4`
+
+2. **Actualizar archivo de configuración**:
+   ```bash
+   # Editar: ProductsAppMobile/src/services/apiClient.ts
+   # Cambiar esta línea:
+   const API_BASE_URL = 'http://192.168.20.46:3001'; // IP de la máquina host
+   
+   # Por tu IP local, ejemplo:
+   const API_BASE_URL = 'http://TU_IP_LOCAL:3001';
+   ```
+
+3. **Asegurar que el backend acepte conexiones de red**:
+   - El backend ya está configurado para aceptar conexiones desde cualquier IP de la red local
+   - Solo cambiar la IP en `apiClient.ts` y reiniciar la app móvil
+
 #### 🎯 **Funcionalidades Implementadas**
 - ✅ **Lista de productos** con datos dummy (10 productos)
 - ✅ **Búsqueda en tiempo real** por nombre y descripción
