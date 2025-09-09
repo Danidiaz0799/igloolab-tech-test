@@ -2,9 +2,9 @@ import { useContext } from 'react';
 import { ProductContext } from '../context/productContext';
 
 export const useProducts = () => {
-  const context = useContext(ProductContext);
-  if (context === undefined) {
-    throw new Error('useProducts debe ser usado dentro de un ProductProvider');
-  }
-  return context;
+    const context = useContext(ProductContext);
+    if (context === undefined) {
+        throw new Error('useProducts debe ser usado dentro de un ProductProvider');
+    }
+    return context;
 };

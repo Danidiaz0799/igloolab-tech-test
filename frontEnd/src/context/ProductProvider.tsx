@@ -2,17 +2,16 @@ import React, { useReducer } from 'react';
 import type { ReactNode } from 'react';
 import { ProductContext, productReducer, initialState } from './productContext';
 
-// Provider del contexto
 interface ProductProviderProps {
-  children: ReactNode;
+    children: ReactNode;
 }
 
 export const ProductProvider: React.FC<ProductProviderProps> = ({ children }) => {
-  const [state, dispatch] = useReducer(productReducer, initialState);
+    const [state, dispatch] = useReducer(productReducer, initialState);
 
-  return (
-    <ProductContext.Provider value={{ state, dispatch }}>
-      {children}
-    </ProductContext.Provider>
-  );
+    return (
+        <ProductContext.Provider value={{ state, dispatch }}>
+            {children}
+        </ProductContext.Provider>
+    );
 };
