@@ -248,7 +248,300 @@ CREATE TABLE products (
 
 ---
 
-*Este proyecto demuestra competencias sólidas en desarrollo Full Stack moderno con las mejores prácticas de la industria.*
+---
+
+## � Versión Móvil React Native
+
+### 🚀 **App Móvil Desarrollada**
+
+Además de la versión web, se desarrolló una **aplicación móvil nativa** con React Native que replica la funcionalidad de la lista de productos.
+
+#### 📁 **Ubicación del Proyecto**
+```
+📦 igloolab-tech-test/
+├── 🎨 frontEnd/              # React web
+├── 🔧 backEnd/               # Node.js API  
+├── 📱 ProductsAppMobile/     # 🆕 React Native app
+└── ...
+```
+
+#### ⚡ **Ejecución de la App Móvil**
+```bash
+# Navegar al proyecto móvil
+cd ProductsAppMobile
+
+# Instalar dependencias (solo primera vez)
+npm install
+
+# Iniciar la aplicación
+npm start
+
+# Opciones de testing:
+# - Presionar 'w' para web browser
+# - Presionar 'a' para Android simulator  
+# - Escanear QR con Expo Go app en tu teléfono
+```
+
+#### 🎯 **Funcionalidades Implementadas**
+- ✅ **Lista de productos** con datos dummy (10 productos)
+- ✅ **Búsqueda en tiempo real** por nombre y descripción
+- ✅ **Formateo de precios** en pesos colombianos (COP)
+- ✅ **Pull to refresh** para actualizar datos
+- ✅ **Diseño responsive** para diferentes tamaños
+- ✅ **Animaciones suaves** y feedback táctil
+- ✅ **TypeScript** con types seguros
+- ✅ **Navegación optimizada** para móvil
+
+#### 📱 **Stack Tecnológico Móvil**
+| **Componente** | **Tecnología** |
+|----------------|----------------|
+| **Framework** | React Native + Expo |
+| **Lenguaje** | TypeScript |
+| **UI Components** | React Native Core |
+| **Navigation** | Expo Router (preparado) |
+| **Testing** | Expo Go + Web + Simulators |
+
+#### 🎨 **Características de Diseño**
+- **Material Design** inspirado
+- **Cards con sombras** y elevación
+- **Colores coherentes** con la versión web
+- **Typography** optimizada para móvil
+- **Touch targets** de tamaño adecuado
+- **Loading states** y empty states
+
+#### 🔧 **Estructura del Proyecto Móvil**
+```
+📱 ProductsAppMobile/
+├── src/
+│   ├── components/
+│   │   ├── ProductCard.tsx      # Tarjeta individual
+│   │   ├── ProductsList.tsx     # Lista principal
+│   │   └── index.ts            # Exports
+│   ├── data/
+│   │   └── dummyProducts.ts    # Datos estáticos
+│   ├── types/
+│   │   └── product.ts          # Interfaces TS
+├── App.tsx                     # Componente raíz
+└── package.json
+```
+
+#### 📸 **Vista Previa de Funcionalidades**
+1. **Lista Principal**: Grid de productos con scroll vertical
+2. **Búsqueda**: Input con filtrado instantáneo
+3. **Tarjetas**: Información completa con precios destacados
+4. **Responsive**: Adaptable a diferentes tamaños de pantalla
+5. **Estados**: Loading, empty, error handling
+
+---
+
+## �🔄 Migración a C# ASP.NET Core
+
+### 🎯 **Replicación de la API RESTful en C#**
+
+La API actual de Node.js/Express puede ser fácilmente replicada en **ASP.NET Core** manteniendo la misma funcionalidad y estructura.
+
+#### 📋 **Stack Tecnológico Equivalente**
+| **Componente** | **Node.js** | **C# ASP.NET** |
+|----------------|-------------|----------------|
+| **Framework** | Express.js | ASP.NET Core 8 |
+| **ORM** | TypeORM | Entity Framework Core |
+| **Base de Datos** | PostgreSQL | PostgreSQL/SQL Server |
+| **Validación** | Middleware custom | Data Annotations |
+| **DI Container** | Manual | Built-in DI |
+
+#### 🛠️ **Estructura del Proyecto C#**
+```
+📦 ProductsAPI/
+├── 🎯 Controllers/
+│   └── ProductsController.cs      # Endpoints API
+├── 🗄️ Models/
+│   └── Product.cs                 # Entity model
+├── 💾 Data/
+│   └── ApplicationDbContext.cs    # DbContext
+├── 📦 DTOs/
+│   ├── CreateProductDto.cs        # Request models
+│   └── ProductResponseDto.cs      # Response models
+├── ⚙️ Services/
+│   └── IProductService.cs         # Business logic
+└── 📄 Program.cs                  # Application setup
+```
+
+#### 💻 **Implementación de los Endpoints**
+
+**1. Modelo de Producto (Product.cs)**
+```csharp
+using System.ComponentModel.DataAnnotations;
+
+public class Product
+{
+    public int Id { get; set; }
+    
+    [Required]
+    [StringLength(100)]
+    public string Name { get; set; }
+    
+    [Required]
+    public string Description { get; set; }
+    
+    [Required]
+    [Range(0, double.MaxValue)]
+    public decimal Price { get; set; }
+    
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+}
+```
+
+**2. DbContext (ApplicationDbContext.cs)**
+```csharp
+using Microsoft.EntityFrameworkCore;
+
+public class ApplicationDbContext : DbContext
+{
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) 
+        : base(options) { }
+    
+    public DbSet<Product> Products { get; set; }
+    
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Product>()
+            .Property(p => p.Price)
+            .HasPrecision(12, 2);
+    }
+}
+```
+
+**3. Controller (ProductsController.cs)**
+```csharp
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+
+[ApiController]
+[Route("api/[controller]")]
+public class ProductsController : ControllerBase
+{
+    private readonly ApplicationDbContext _context;
+    
+    public ProductsController(ApplicationDbContext context)
+    {
+        _context = context;
+    }
+    
+    // GET: api/products
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+    {
+        return await _context.Products.ToListAsync();
+    }
+    
+    // POST: api/products
+    [HttpPost]
+    public async Task<ActionResult<Product>> CreateProduct(CreateProductDto dto)
+    {
+        var product = new Product
+        {
+            Name = dto.Name,
+            Description = dto.Description,
+            Price = dto.Price
+        };
+        
+        _context.Products.Add(product);
+        await _context.SaveChangesAsync();
+        
+        return CreatedAtAction(nameof(GetProducts), new { id = product.Id }, product);
+    }
+    
+    // DELETE: api/products/{id}
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteProduct(int id)
+    {
+        var product = await _context.Products.FindAsync(id);
+        if (product == null) return NotFound();
+        
+        _context.Products.Remove(product);
+        await _context.SaveChangesAsync();
+        
+        return NoContent();
+    }
+}
+```
+
+**4. Configuration (Program.cs)**
+```csharp
+using Microsoft.EntityFrameworkCore;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Services
+builder.Services.AddControllers();
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReactApp",
+        policy => policy.WithOrigins("http://localhost:5173")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod());
+});
+
+var app = builder.Build();
+
+// Pipeline
+app.UseCors("AllowReactApp");
+app.UseRouting();
+app.MapControllers();
+
+app.Run();
+```
+
+#### ⚙️ **Configuración de Conexión**
+**appsettings.json:**
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Host=localhost;Database=products_db;Username=postgres;Password=password"
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information"
+    }
+  }
+}
+```
+
+#### 🚀 **Comandos para Setup**
+```bash
+# Crear proyecto
+dotnet new webapi -n ProductsAPI
+cd ProductsAPI
+
+# Instalar packages
+dotnet add package Microsoft.EntityFrameworkCore
+dotnet add package Microsoft.EntityFrameworkCore.Design
+dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL
+
+# Ejecutar migraciones
+dotnet ef migrations add InitialCreate
+dotnet ef database update
+
+# Ejecutar aplicación
+dotnet run  # http://localhost:5000
+```
+
+#### 🔍 **Ventajas de ASP.NET Core**
+- ✅ **Performance superior** - Mejor rendimiento que Node.js
+- ✅ **Type safety nativo** - C# fuertemente tipado
+- ✅ **Ecosystem maduro** - NuGet, Entity Framework
+- ✅ **Escalabilidad** - Mejor para aplicaciones empresariales
+- ✅ **Debugging avanzado** - Visual Studio integration
+- ✅ **Deploy sencillo** - IIS, Azure, Docker
+
+---
+
+*Este proyecto demuestra competencias sólidas en desarrollo Full Stack moderno aplicando las mejores prácticas de la industria y enfoque en experiencia de usuario.*
 
 - **Frontend**: React con TypeScript y Vite
 - **Backend**: Node.js con TypeScript, Express y TypeORM

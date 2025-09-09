@@ -39,12 +39,12 @@ const ProductsList = () => {
         }
     }, [dispatch]);
 
-    const formatPrice = useCallback((price: string): string => {
+    const formatPrice = useCallback((price: number): string => {
         return new Intl.NumberFormat('es-CO', {
         style: 'currency',
         currency: 'COP',
         minimumFractionDigits: 2
-        }).format(parseFloat(price));
+        }).format(price);
     }, []);
 
     const formatDate = useCallback((dateString: string): string => {

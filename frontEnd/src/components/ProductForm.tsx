@@ -10,7 +10,7 @@ import './ProductForm.css';
 interface FormData {
     name: string;
     description: string;
-    price: string;
+    price: number;
 }
 
 const SUCCESS_MESSAGE_DURATION = 3000;
@@ -31,7 +31,7 @@ const ProductForm = () => {
         defaultValues: {
         name: '',
         description: '',
-        price: ''
+        price: 0
         }
     });
 
@@ -42,9 +42,9 @@ const ProductForm = () => {
         setTimeout(() => setSubmitSuccess(false), SUCCESS_MESSAGE_DURATION);
     }, []);
 
-    const formatPricePreview = useCallback((price: string): string => {
+    const formatPricePreview = useCallback((price: number): string => {
         if (!price) return '';
-        const numericPrice = parseFloat(price);
+        const numericPrice = price;
         if (isNaN(numericPrice)) return '';
         return new Intl.NumberFormat('es-CO', {
         style: 'currency',
@@ -61,7 +61,7 @@ const ProductForm = () => {
         const productData: CreateProductDto = {
             name: data.name.trim(),
             description: data.description.trim(),
-            price: parseFloat(data.price)
+            price: data.price
         };
 
         const newProduct = await productService.createProduct(productData);
@@ -177,10 +177,7 @@ const ProductForm = () => {
                         value: 999999999.99,
                         message: 'El precio es demasiado alto'
                         },
-                        pattern: {
-                        value: /^\d+(\.\d{1,2})?$/,
-                        message: 'Ingresa un precio válido (máximo 2 decimales)'
-                        }
+                        valueAsNumber: true
                     })}
                     />
                 </div>
