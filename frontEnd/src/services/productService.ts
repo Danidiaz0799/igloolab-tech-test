@@ -1,94 +1,189 @@
 import axios from 'axios';
 import type { AxiosResponse } from 'axios';
 import type { Product, CreateProductDto, ApiResponse } from '../types/product';
+import { dummyDataService } from './dummyDataService';
 
-// Configuración base de axios
+// Configuración
 const API_BASE_URL = 'http://localhost:3001/api';
+const API_TIMEOUT = 5000;
 
-const apiClient = axios.create({
-  baseURL: API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  timeout: 10000, // 10 segundos de timeout
-});
+// Estados
+type ConnectionStatus = 'connected' | 'disconnected' | 'checking';
 
-// Interceptor para manejar errores globalmente
-apiClient.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    console.error('Error en la API:', error);
-    return Promise.reject(error);
+class ApiClient {
+  private client = axios.create({
+    baseURL: API_BASE_URL,
+    headers: { 'Content-Type': 'application/json' },
+    timeout: API_TIMEOUT,
+  });
+
+  constructor() {
+    this.setupInterceptors();
   }
-);
 
-// Servicio para operaciones con productos
-export const productService = {
-  // Obtener todos los productos
-  async getAllProducts(): Promise<Product[]> {
+  private setupInterceptors(): void {
+    this.client.interceptors.response.use(
+      (response) => response,
+      (error) => Promise.reject(error)
+    );
+  }
+
+  async get<T>(url: string): Promise<AxiosResponse<T>> {
+    return this.client.get<T>(url);
+  }
+
+  async post<T>(url: string, data: unknown): Promise<AxiosResponse<T>> {
+    return this.client.post<T>(url, data);
+  }
+
+  async delete(url: string): Promise<AxiosResponse<void>> {
+    return this.client.delete(url);
+  }
+
+  async checkConnection(): Promise<boolean> {
     try {
-      const response: AxiosResponse<ApiResponse<Product[]>> = await apiClient.get('/products');
-      return response.data.data || [];
-    } catch (error) {
-      console.error('Error al obtener productos:', error);
-      throw new Error('No se pudieron cargar los productos');
+      await this.client.get('/products');
+      return true;
+    } catch {
+      return false;
     }
-  },
+  }
+}
 
-  // Obtener producto por ID
-  async getProductById(id: number): Promise<Product> {
+class ProductService {
+  private apiClient = new ApiClient();
+  private isUsingDummyData = false;
+  private connectionStatus: ConnectionStatus = 'checking';
+
+  async getAllProducts(): Promise<Product[]> {
+    if (this.isUsingDummyData) {
+      return this.getDummyProducts();
+    }
+
     try {
-      const response: AxiosResponse<ApiResponse<Product>> = await apiClient.get(`/products/${id}`);
+      const response = await this.apiClient.get<ApiResponse<Product[]>>('/products');
+      this.setConnected();
+      return response.data.data || [];
+    } catch {
+      this.switchToDummyMode();
+      return this.getDummyProducts();
+    }
+  }
+
+  async createProduct(productData: CreateProductDto): Promise<Product> {
+    if (this.isUsingDummyData) {
+      return dummyDataService.createProduct(productData);
+    }
+
+    try {
+      const response = await this.apiClient.post<ApiResponse<Product>>('/products', productData);
       if (!response.data.data) {
+        throw new Error('Respuesta inválida del servidor');
+      }
+      this.setConnected();
+      return response.data.data;
+    } catch (error) {
+      if (this.isServerError(error)) {
+        this.switchToDummyMode();
+        return dummyDataService.createProduct(productData);
+      }
+      
+      if (this.isValidationError(error)) {
+        const axiosError = error as { response: { data: { required_fields?: string[]; message?: string } } };
+        const errorData = axiosError.response.data;
+        throw new Error(
+          errorData.required_fields 
+            ? `Campos requeridos: ${errorData.required_fields.join(', ')}`
+            : errorData.message || 'Datos inválidos'
+        );
+      }
+      
+      throw new Error(error instanceof Error ? error.message : 'Error al crear producto');
+    }
+  }
+
+  async deleteProduct(id: number): Promise<void> {
+    if (this.isUsingDummyData) {
+      return dummyDataService.deleteProduct(id);
+    }
+
+    try {
+      await this.apiClient.delete(`/products/${id}`);
+      this.setConnected();
+    } catch (error) {
+      if (this.isServerError(error)) {
+        this.switchToDummyMode();
+        return dummyDataService.deleteProduct(id);
+      }
+      
+      if (this.isNotFoundError(error)) {
         throw new Error('Producto no encontrado');
       }
-      return response.data.data;
-    } catch (error) {
-      console.error(`Error al obtener producto ${id}:`, error);
-      throw new Error('No se pudo cargar el producto');
-    }
-  },
-
-  // Crear nuevo producto
-  async createProduct(productData: CreateProductDto): Promise<Product> {
-    try {
-      const response: AxiosResponse<ApiResponse<Product>> = await apiClient.post('/products', productData);
-      if (!response.data.data) {
-        throw new Error('Error al crear el producto');
-      }
-      return response.data.data;
-    } catch (error: unknown) {
-      console.error('Error al crear producto:', error);
       
-      // Manejar errores específicos de validación
-      if (axios.isAxiosError(error) && error.response?.data?.message) {
-        throw new Error(error.response.data.message);
-      }
-      
-      throw new Error('No se pudo crear el producto');
-    }
-  },
-
-  // Eliminar producto
-  async deleteProduct(id: number): Promise<void> {
-    try {
-      await apiClient.delete(`/products/${id}`);
-    } catch (error: unknown) {
-      console.error(`Error al eliminar producto ${id}:`, error);
-      
-      if (axios.isAxiosError(error)) {
-        if (error.response?.status === 404) {
-          throw new Error('Producto no encontrado');
-        }
-        
-        if (error.response?.data?.message) {
-          throw new Error(error.response.data.message);
-        }
-      }
-      
-      throw new Error('No se pudo eliminar el producto');
+      throw new Error(error instanceof Error ? error.message : 'Error al eliminar producto');
     }
   }
-};
 
-export default productService;
+  getConnectionStatus(): ConnectionStatus {
+    return this.connectionStatus;
+  }
+
+  isUsingDummy(): boolean {
+    return this.isUsingDummyData;
+  }
+
+  async switchToDummyMode(): Promise<void> {
+    this.isUsingDummyData = true;
+    this.connectionStatus = 'disconnected';
+  }
+
+  async switchToApiMode(): Promise<boolean> {
+    const isConnected = await this.apiClient.checkConnection();
+    if (isConnected) {
+      this.isUsingDummyData = false;
+      this.setConnected();
+      return true;
+    }
+    return false;
+  }
+
+  async checkConnection(): Promise<boolean> {
+    this.connectionStatus = 'checking';
+    const isConnected = await this.apiClient.checkConnection();
+    this.connectionStatus = isConnected ? 'connected' : 'disconnected';
+    return isConnected;
+  }
+
+  resetDummyData(): void {
+    dummyDataService.resetData();
+  }
+
+  private async getDummyProducts(): Promise<Product[]> {
+    try {
+      const response = await dummyDataService.getAllProducts();
+      return response.data || [];
+    } catch {
+      throw new Error('Error al cargar productos dummy');
+    }
+  }
+
+  private setConnected(): void {
+    this.connectionStatus = 'connected';
+  }
+
+  private isServerError(error: unknown): boolean {
+    return axios.isAxiosError(error) && 
+           (error.code === 'ECONNREFUSED' || 
+            (error.response?.status !== undefined && error.response.status >= 500));
+  }
+
+  private isValidationError(error: unknown): boolean {
+    return axios.isAxiosError(error) && error.response?.status === 400;
+  }
+
+  private isNotFoundError(error: unknown): boolean {
+    return axios.isAxiosError(error) && error.response?.status === 404;
+  }
+}
+
+export const productService = new ProductService();

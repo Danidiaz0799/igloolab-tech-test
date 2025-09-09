@@ -11,7 +11,7 @@ export class Product {
   @Column({ type: 'text', nullable: false })
   description!: string;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: false })
+  @Column({ type: 'decimal', precision: 12, scale: 2, nullable: false })
   price!: number;
 
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })

@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { useForm, type SubmitHandler } from 'react-hook-form';
+import { useState, useCallback } from 'react';
+import { useForm } from 'react-hook-form';
+import type { SubmitHandler } from 'react-hook-form';
 import { productService } from '../services/productService';
 import { useProducts } from '../hooks/useProducts';
 import { productActions } from '../context/productActions';
@@ -12,7 +13,9 @@ interface FormData {
   price: string;
 }
 
-const ProductForm: React.FC = () => {
+const SUCCESS_MESSAGE_DURATION = 3000;
+
+const ProductForm = () => {
   const { dispatch } = useProducts();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
@@ -34,7 +37,23 @@ const ProductForm: React.FC = () => {
 
   const watchedFields = watch();
 
-  const onSubmit: SubmitHandler<FormData> = async (data) => {
+  const showSuccessMessage = useCallback(() => {
+    setSubmitSuccess(true);
+    setTimeout(() => setSubmitSuccess(false), SUCCESS_MESSAGE_DURATION);
+  }, []);
+
+  const formatPricePreview = useCallback((price: string): string => {
+    if (!price) return '';
+    const numericPrice = parseFloat(price);
+    if (isNaN(numericPrice)) return '';
+    return new Intl.NumberFormat('es-CO', {
+      style: 'currency',
+      currency: 'COP',
+      minimumFractionDigits: 2
+    }).format(numericPrice);
+  }, []);
+
+  const onSubmit: SubmitHandler<FormData> = useCallback(async (data) => {
     setIsSubmitting(true);
     setSubmitSuccess(false);
 
@@ -46,16 +65,10 @@ const ProductForm: React.FC = () => {
       };
 
       const newProduct = await productService.createProduct(productData);
-      
       dispatch(productActions.addProduct(newProduct));
       
-      setSubmitSuccess(true);
       reset();
-      
-      setTimeout(() => {
-        setSubmitSuccess(false);
-      }, 3000);
-
+      showSuccessMessage();
     } catch (error) {
       dispatch(productActions.setError(
         error instanceof Error ? error.message : 'Error al crear producto'
@@ -63,18 +76,7 @@ const ProductForm: React.FC = () => {
     } finally {
       setIsSubmitting(false);
     }
-  };
-
-  const formatPricePreview = (price: string) => {
-    if (!price) return '';
-    const numericPrice = parseFloat(price);
-    if (isNaN(numericPrice)) return '';
-    return new Intl.NumberFormat('es-CO', {
-      style: 'currency',
-      currency: 'COP',
-      minimumFractionDigits: 2
-    }).format(numericPrice);
-  };
+  }, [dispatch, reset, showSuccessMessage]);
 
   return (
     <div className="product-form-container">

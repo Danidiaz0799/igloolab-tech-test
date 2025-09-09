@@ -1,10 +1,10 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { productService } from '../services/productService';
 import { useProducts } from '../hooks/useProducts';
 import { productActions } from '../context/productActions';
 import './ProductsList.css';
 
-const ProductsList: React.FC = () => {
+const ProductsList = () => {
   const { state, dispatch } = useProducts();
   const { products, loading, error } = state;
   const [deleteLoading, setDeleteLoading] = useState<number | null>(null);
@@ -24,7 +24,7 @@ const ProductsList: React.FC = () => {
     loadProducts();
   }, [loadProducts]);
 
-  const handleDeleteProduct = async (productId: number, productName: string) => {
+  const handleDeleteProduct = useCallback(async (productId: number, productName: string) => {
     if (!window.confirm(`¿Estás seguro de que quieres eliminar "${productName}"?`)) {
       return;
     }
@@ -38,17 +38,17 @@ const ProductsList: React.FC = () => {
     } finally {
       setDeleteLoading(null);
     }
-  };
+  }, [dispatch]);
 
-  const formatPrice = (price: string) => {
+  const formatPrice = useCallback((price: string): string => {
     return new Intl.NumberFormat('es-CO', {
       style: 'currency',
       currency: 'COP',
       minimumFractionDigits: 2
     }).format(parseFloat(price));
-  };
+  }, []);
 
-  const formatDate = (dateString: string) => {
+  const formatDate = useCallback((dateString: string): string => {
     return new Date(dateString).toLocaleDateString('es-CO', {
       year: 'numeric',
       month: 'short',
@@ -56,7 +56,7 @@ const ProductsList: React.FC = () => {
       hour: '2-digit',
       minute: '2-digit'
     });
-  };
+  }, []);
 
   if (loading) {
     return (
